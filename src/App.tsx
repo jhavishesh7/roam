@@ -11,6 +11,12 @@ import { Treks } from './pages/Treks';
 import { TrekDetail } from './pages/TrekDetail';
 import { Homestays } from './pages/Homestays';
 import { Marketplace } from './pages/Marketplace';
+import PasswordResetSent from './pages/PasswordResetSent';
+import AI_tools from './pages/AI_tools';
+import TrekRoute from './pages/TrekRoute';
+import HomestayDetail from './pages/HomestayDetail';
+import Subscriptions from './pages/Subscriptions';
+import PaymentComingSoon from './pages/PaymentComingSoon';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -40,8 +46,14 @@ const AppContent: React.FC = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/treks" element={<Treks />} />
           <Route path="/trek/:id" element={<TrekDetail />} />
+          <Route path="/trek/:id/route" element={<TrekRoute />} />
           <Route path="/homestays" element={<Homestays />} />
+          <Route path="/homestay/:id" element={<HomestayDetail />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/password-reset-sent" element={<PasswordResetSent />} />
+          <Route path="/ai_tools" element={<AI_tools />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/payment-coming-soon" element={<PaymentComingSoon />} />
           <Route 
             path="/dashboard" 
             element={

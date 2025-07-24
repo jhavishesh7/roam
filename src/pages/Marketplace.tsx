@@ -15,8 +15,8 @@ import { Input } from '../components/ui/Input';
 
 export const Marketplace: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-16">
         {/* Coming Soon Hero */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -227,23 +227,28 @@ export const Marketplace: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <Card className="p-8 text-center bg-gradient-to-r from-accent-500 to-accent-600 text-white">
+          <Card className="p-8 text-center bg-white">
             <Bell className="h-12 w-12 mx-auto mb-4 opacity-90" />
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">
               Be the First to Know
             </h2>
-            <p className="text-accent-100 mb-6 max-w-2xl mx-auto">
+            <p className="mb-6 max-w-2xl mx-auto text-gray-700">
               Get notified when our marketplace launches and receive exclusive early access 
               to the best trek gear and local products.
             </p>
-            <div className="max-w-md mx-auto flex space-x-3">
+            <div className="max-w-md mx-auto flex flex-col sm:flex-row items-center justify-center mt-8 text-black">
               <Input
                 placeholder="Enter your email"
-                className="bg-white text-gray-900"
+                className="bg-white text-gray-900 border border-gray-300 shadow-sm rounded-l-lg rounded-r-none px-4 py-3 w-full sm:w-auto flex-1 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition sm:rounded-l-lg sm:rounded-r-none"
               />
-              <Button variant="outline" className="bg-white text-accent-600 border-white hover:bg-accent-50">
+              <Button
+                variant="outline"
+                size="lg"
+                className="sm:rounded-l-none sm:rounded-r-lg rounded-lg px-8 py-3 font-semibold shadow-md -ml-px w-full sm:w-auto text-black border-primary-600 bg-white hover:bg-primary-50"
+                style={{ minWidth: 'auto' }}
+              >
                 Notify Me
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
             </div>
           </Card>

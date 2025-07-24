@@ -20,10 +20,10 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500',
-    secondary: 'bg-accent-500 hover:bg-accent-600 text-white focus:ring-accent-500',
-    outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
-    ghost: 'text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
+    primary: 'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 animate-buttonFlicker',
+    secondary: 'bg-accent-500 hover:bg-accent-600 text-white focus:ring-accent-500 animate-buttonFlicker',
+    outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500 animate-buttonFlicker',
+    ghost: 'text-primary-600 hover:bg-primary-50 focus:ring-primary-500 animate-buttonFlicker',
   };
 
   const sizes = {

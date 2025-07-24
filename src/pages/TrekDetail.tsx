@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   MapPin, 
@@ -28,59 +28,64 @@ export const TrekDetail: React.FC = () => {
   const { id } = useParams();
   const [newMessage, setNewMessage] = useState('');
   const [isWaitlisted, setIsWaitlisted] = useState(false);
+  const navigate = useNavigate();
 
   // Mock data - in real app, fetch based on ID
-  const trek = {
-    id: 1,
-    name: 'Annapurna Base Camp Trek',
-    location: 'Nepal, Himalayas',
-    difficulty: 'Moderate',
-    duration: '12-14 days',
-    maxAltitude: '4,130m',
-    bestSeason: 'Oct-Nov, Mar-May',
-    price: '$1,200',
-    rating: 4.8,
-    reviews: 156,
-    images: [
-      'https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      'https://images.pexels.com/photos/1578662/pexels-photo-1578662.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    ],
-    description: 'The Annapurna Base Camp trek is one of Nepal\'s most popular trekking routes, offering stunning mountain views, diverse landscapes, and rich cultural encounters. This moderate trek takes you through rhododendron forests, traditional Gurung villages, and alpine meadows before reaching the spectacular amphitheater of peaks at Annapurna Base Camp.',
-    highlights: [
-      'Stunning 360-degree mountain panoramas at ABC',
-      'Cultural immersion in traditional Gurung villages',
-      'Hot springs at Jhinu Danda for relaxation',
-      'Diverse ecosystems from subtropical to alpine',
-      'Views of Annapurna I, Machapuchare, and Hiunchuli',
-    ],
-    itinerary: [
-      { day: 1, title: 'Drive to Pokhara, trek to Ulleri', elevation: '2,070m' },
-      { day: 2, title: 'Trek to Ghorepani', elevation: '2,874m' },
-      { day: 3, title: 'Poon Hill sunrise, trek to Tadapani', elevation: '2,630m' },
-      { day: 4, title: 'Trek to Chhomrong', elevation: '2,170m' },
-      { day: 5, title: 'Trek to Dovan', elevation: '2,600m' },
-      { day: 6, title: 'Trek to Deurali', elevation: '3,230m' },
-      { day: 7, title: 'Trek to Annapurna Base Camp', elevation: '4,130m' },
-    ],
-    equipment: [
-      'Sleeping bag (-10°C rating)',
-      'Insulated jacket',
-      'Waterproof jacket and pants',
-      'Trekking boots',
-      'Trekking poles',
-      'Headlamp with extra batteries',
-      'Sun hat and sunglasses',
-      'First aid kit',
-    ],
-    currentConditions: {
-      weather: 'Clear skies with afternoon clouds',
-      temperature: '-5°C to 15°C',
-      visibility: 'Excellent mountain views',
-      trails: 'Good condition, some ice on high passes',
-      lastUpdated: '2 hours ago',
+  const treks = [
+    {
+      id: 1,
+      name: 'Annapurna Base Camp Trek',
+      location: 'Nepal',
+      difficulty: 'Moderate',
+      duration: '12-14 days',
+      maxAltitude: '4,130m',
+      bestSeason: 'Oct-Nov, Mar-May',
+      price: '$1,200',
+      rating: 4.8,
+      reviews: 156,
+      image: 'https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Experience the majestic Annapurna massif with stunning mountain views, diverse landscapes, and rich cultural encounters.',
+      highlights: ['Stunning mountain panoramas', 'Cultural villages', 'Hot springs at Jhinu Danda'],
+      currentConditions: 'Good trail conditions',
+      weather: 'Clear skies, -5°C to 15°C',
     },
-  };
+    {
+      id: 2,
+      name: 'Everest Base Camp Trek',
+      location: 'Nepal',
+      difficulty: 'Moderate',
+      duration: '14-16 days',
+      maxAltitude: '5,364m',
+      bestSeason: 'Mar-May, Sep-Nov',
+      price: '$1,500',
+      rating: 4.9,
+      reviews: 200,
+      image: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Trek through the Sherpa villages and high passes to the base camp of the world\'s highest peak.',
+      highlights: ['Views of Everest and Lhotse', 'Cultural interaction with Sherpas', 'High altitude acclimatization'],
+      currentConditions: 'Good trail conditions',
+      weather: 'Clear skies, -10°C to 10°C',
+    },
+    {
+      id: 3,
+      name: 'Langtang Valley Trek',
+      location: 'Nepal',
+      difficulty: 'Easy',
+      duration: '7-9 days',
+      maxAltitude: '3,400m',
+      bestSeason: 'Oct-Nov, Mar-May',
+      price: '$800',
+      rating: 4.6,
+      reviews: 100,
+      image: 'https://images.pexels.com/photos/1578662/pexels-photo-1578662.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Explore the beautiful Langtang valley, home to the Tamang people and their traditional culture.',
+      highlights: ['Beautiful alpine meadows', 'Tamang villages', 'Hot springs at Langtang'],
+      currentConditions: 'Good trail conditions',
+      weather: 'Clear skies, -5°C to 15°C',
+    },
+  ];
+  // Use the id param to select the correct trek
+  const trek = treks.find(t => t.id === Number(id)) || treks[0];
 
   const forumMessages = [
     {
@@ -121,12 +126,15 @@ export const TrekDetail: React.FC = () => {
     setIsWaitlisted(!isWaitlisted);
   };
 
+  // Dummy nearest homestay (replace with real logic if available)
+  const nearestHomestay = { id: 1, name: 'Annapurna Homestay', distance: '10km' };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative h-96 overflow-hidden">
         <img
-          src={trek.images[0]}
+          src={trek.image}
           alt={trek.name}
           className="w-full h-full object-cover"
         />
@@ -166,7 +174,28 @@ export const TrekDetail: React.FC = () => {
               transition={{ duration: 0.6 }}
             >
               <Card className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Trek Overview</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">Trek Overview</h2>
+                  <Button
+                    onClick={() => navigate(`/trek/${trek.id}/route`)}
+                    className="ml-4 px-6 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 text-white font-semibold shadow-lg hover:scale-105 transition-transform border-2 border-white/60"
+                    style={{ minWidth: 'fit-content' }}
+                  >
+                    <svg className="inline-block mr-2 -mt-1" width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M12 19V6m0 0l-7 7m7-7l7 7"/></svg>
+                    View Route
+                  </Button>
+                </div>
+                <div className="relative w-full h-6 mb-6 -mt-2">
+                  <svg className="absolute left-0 w-full h-full" viewBox="0 0 400 24" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,12 Q100,24 200,12 T400,12" fill="none" stroke="url(#greenWave)" strokeWidth="4"/>
+                    <defs>
+                      <linearGradient id="greenWave" x1="0" y1="0" x2="400" y2="24" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#22c55e" />
+                        <stop offset="1" stopColor="#10b981" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
                 <p className="text-gray-600 mb-6 leading-relaxed">{trek.description}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -223,14 +252,14 @@ export const TrekDetail: React.FC = () => {
                       <CloudRain className="h-5 w-5 text-gray-500" />
                       <div>
                         <div className="text-sm text-gray-600">Weather</div>
-                        <div className="font-medium">{trek.currentConditions.weather}</div>
+                        <div className="font-medium">{trek.weather}</div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Thermometer className="h-5 w-5 text-gray-500" />
                       <div>
                         <div className="text-sm text-gray-600">Temperature</div>
-                        <div className="font-medium">{trek.currentConditions.temperature}</div>
+                        <div className="font-medium">{trek.weather.split(',')[0].replace('-', '')}</div>
                       </div>
                     </div>
                   </div>
@@ -239,20 +268,20 @@ export const TrekDetail: React.FC = () => {
                       <Eye className="h-5 w-5 text-gray-500" />
                       <div>
                         <div className="text-sm text-gray-600">Visibility</div>
-                        <div className="font-medium">{trek.currentConditions.visibility}</div>
+                        <div className="font-medium">Excellent mountain views</div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Mountain className="h-5 w-5 text-gray-500" />
                       <div>
                         <div className="text-sm text-gray-600">Trail Conditions</div>
-                        <div className="font-medium">{trek.currentConditions.trails}</div>
+                        <div className="font-medium">{trek.currentConditions}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-4 text-xs text-gray-500">
-                  Last updated: {trek.currentConditions.lastUpdated}
+                  Last updated: 2 hours ago
                 </div>
               </Card>
             </motion.div>
@@ -306,14 +335,14 @@ export const TrekDetail: React.FC = () => {
                       </div>
                       <p className="text-gray-700 mb-3">{message.message}</p>
                       <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-primary-600">
+                        <Button variant="ghost" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-primary-600">
                           <ThumbsUp className="h-4 w-4" />
                           <span>{message.upvotes}</span>
-                        </button>
-                        <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-red-600">
+                        </Button>
+                        <Button variant="ghost" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-red-600">
                           <ThumbsDown className="h-4 w-4" />
                           <span>{message.downvotes}</span>
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -363,8 +392,7 @@ export const TrekDetail: React.FC = () => {
                 {/* Emergency Alert */}
                 <div className="border-t pt-6">
                   <Button 
-                    variant="secondary" 
-                    className="w-full"
+                    className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold shadow-lg transition-all duration-200"
                     onClick={handleEmergencyAlert}
                   >
                     <AlertTriangle className="h-4 w-4 mr-2" />
@@ -386,12 +414,40 @@ export const TrekDetail: React.FC = () => {
               <Card className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Essential Equipment</h3>
                 <ul className="space-y-2">
-                  {trek.equipment.map((item, index) => (
-                    <li key={index} className="flex items-center space-x-2 text-sm">
-                      <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))}
+                  {/* This section needs to be updated based on the new trek structure */}
+                  {/* For now, keeping the original structure but it might need adjustment */}
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Sleeping bag (-10°C rating)</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Insulated jacket</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Waterproof jacket and pants</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Trekking boots</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Trekking poles</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Headlamp with extra batteries</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">Sun hat and sunglasses</span>
+                  </li>
+                  <li className="flex items-center space-x-2 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
+                    <span className="text-gray-700">First aid kit</span>
+                  </li>
                 </ul>
               </Card>
             </motion.div>
@@ -414,6 +470,23 @@ export const TrekDetail: React.FC = () => {
                 </div>
               </Card>
             </motion.div>
+
+            {nearestHomestay && (
+              <div className="mt-8">
+                <h3 className="text-xl font-bold mb-2 text-primary-700">Nearest Homestay</h3>
+                <Button
+                  onClick={() => navigate(`/homestays?highlight=${nearestHomestay.id}`)}
+                  className="mb-4"
+                >
+                  View Nearest Homestay
+                </Button>
+              </div>
+            )}
+            <div className="flex flex-col gap-4">
+              <Button onClick={() => navigate(`/trek/${trek.id}/route`)} className="self-start mb-4">
+                View Route
+              </Button>
+            </div>
           </div>
         </div>
       </div>

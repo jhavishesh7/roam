@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { 
   Search, 
-  Shield, 
   Home as HomeIcon, 
   MessageCircle, 
   AlertTriangle,
@@ -16,28 +17,19 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 
 export const Home: React.FC = () => {
-  const features = [
-    {
-      icon: <Search className="h-8 w-8" />,
-      title: 'Trek Discovery',
-      description: 'Search and explore detailed information about treks with difficulty levels, weather conditions, and route maps.',
-    },
-    {
-      icon: <MessageCircle className="h-8 w-8" />,
-      title: 'Community Forums',
-      description: 'Connect with fellow trekkers, share experiences, and get real-time updates from recent adventurers.',
-    },
-    {
-      icon: <AlertTriangle className="h-8 w-8" />,
-      title: 'Emergency Alerts',
-      description: 'Stay safe with our emergency broadcast system that alerts waitlisted users and provides SOS features.',
-    },
-    {
-      icon: <HomeIcon className="h-8 w-8" />,
-      title: 'Local Homestays',
-      description: 'Discover authentic cultural experiences with local homestays and immersive cultural packages.',
-    },
+  // Example gallery images
+  const galleryImages = [
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80',
   ];
+
+  // Add state for selected background image
+  const [selectedBg, setSelectedBg] = useState(galleryImages[0]);
+  // Add state for animating background image
+  const [bgAnimKey, setBgAnimKey] = useState(0);
 
   const featuredTreks = [
     {
@@ -72,82 +64,160 @@ export const Home: React.FC = () => {
     },
   ];
 
+  // Add state for search input and filtered treks
+  const [search, setSearch] = useState('');
+  const [filteredTreks, setFilteredTreks] = useState(featuredTreks);
+
+  // Handle search
+  const handleSearch = () => {
+    if (!search.trim()) {
+      setFilteredTreks(featuredTreks);
+      return;
+    }
+    setFilteredTreks(
+      featuredTreks.filter(trek =>
+        trek.name.toLowerCase().includes(search.toLowerCase()) ||
+        trek.location.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  };
+
+  // When selectedBg changes, update animation key
+  useEffect(() => {
+    setBgAnimKey((k) => k + 1);
+  }, [selectedBg]);
+
+  // Parallax effect
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [parallax, setParallax] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        setParallax(Math.max(0, -rect.top * 0.3));
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const features = [
+    {
+      icon: <Search className="h-8 w-8" />,
+      title: 'Trek Discovery',
+      description: 'Search and explore detailed information about treks with difficulty levels, weather conditions, and route maps.',
+    },
+    {
+      icon: <MessageCircle className="h-8 w-8" />,
+      title: 'Community Forums',
+      description: 'Connect with fellow trekkers, share experiences, and get real-time updates from recent adventurers.',
+    },
+    {
+      icon: <AlertTriangle className="h-8 w-8" />,
+      title: 'Emergency Alerts',
+      description: 'Stay safe with our emergency broadcast system that alerts waitlisted users and provides SOS features.',
+    },
+    {
+      icon: <HomeIcon className="h-8 w-8" />,
+      title: 'Local Homestays',
+      description: 'Discover authentic cultural experiences with local homestays and immersive cultural packages.',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Your Ultimate
-              <span className="block text-accent-400">Trekking Companion</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-primary-100 max-w-3xl mx-auto">
-              Discover breathtaking treks, connect with local communities, and explore 
-              authentic cultural experiences with safety at every step.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
-                <Link to="/treks">Explore Treks</Link>
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-primary-600">
-                <Link to="/auth">Join Community</Link>
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-accent-400/20 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 right-10 w-32 h-32 bg-primary-400/20 rounded-full blur-xl"></div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose TrekSphere?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide everything you need for safe, memorable, and culturally rich trekking experiences.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card hover className="p-6 text-center h-full">
-                  <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <div className="text-primary-600">{feature.icon}</div>
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white font-sans">
+      {/* Hero Section with Parallax and Glassy Overlay */}
+      <section ref={heroRef} className="relative w-full h-screen flex items-center justify-between overflow-hidden rounded-b-3xl shadow-lg px-4 md:px-16">
+        {/* Parallax Background Image with crazy animation */}
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={bgAnimKey}
+            src={selectedBg}
+            alt="Trek Adventure"
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            style={{ transform: `translateY(${parallax}px) scale(1.08)` }}
+            initial={{ opacity: 0, scale: 1.2, filter: 'blur(16px) grayscale(1)' }}
+            animate={{ opacity: 1, scale: 1.08, filter: 'blur(0px) grayscale(0)' }}
+            exit={{ opacity: 0, scale: 0.9, filter: 'blur(32px) grayscale(1)' }}
+            transition={{ duration: 0.9, ease: [0.4, 0.8, 0.2, 1] }}
+          />
+        </AnimatePresence>
+        {/* Parallax Layered Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-blue-800/60 to-primary-600/60 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent z-20 pointer-events-none" />
+        {/* Content - align left */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-30 flex flex-col items-start text-left px-4 pt-32 w-full max-w-2xl"
+        >
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-lg tracking-tight">
+            Explore <span className="text-primary-300 animate-pulse">Epic Treks</span> & Adventures
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-100 mb-10 max-w-2xl font-medium animate-fadeInUp">
+            Discover breathtaking destinations, connect with trekkers, and plan your next journey with ease.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xl mb-8">
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search for treks, destinations, or experience..."
+              className="flex-1 px-5 py-4 rounded-xl border border-white/30 bg-white/80 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-300 text-lg shadow animate-fadeInUp"
+            />
+            <Button
+              className="px-10 py-4 text-lg rounded-xl text-white font-bold shadow-xl transition-all duration-200 border-0 flex items-center gap-2"
+              onClick={handleSearch}
+            >
+              <Search className="h-5 w-5 text-white" /> Search
+            </Button>
           </div>
-        </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button size="lg" variant="primary" className="rounded-full px-8 py-3 text-lg font-semibold shadow-md animate-glow">
+              Find Your Trek
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full px-8 py-3 text-lg font-semibold border-2 border-white text-white hover:bg-white/10 shadow-md animate-glow">
+              Get Safety Alerts
+            </Button>
+          </div>
+        </motion.div>
+        {/* Parallax Gallery - align right */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="absolute bottom-8 right-8 flex gap-6 z-30 bg-white/70 rounded-2xl px-6 py-3 shadow-xl backdrop-blur-md"
+          style={{ transform: `translateY(${parallax * 0.5}px)` }}
+        >
+          {galleryImages.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`Trek Gallery ${idx + 1}`}
+              className={`w-28 h-20 object-cover rounded-xl border-2 border-white shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer ${selectedBg === img ? 'ring-4 ring-primary-400' : ''}`}
+              onClick={() => setSelectedBg(img)}
+            />
+          ))}
+        </motion.div>
+      </section>
+      {/* Features Section - glassy, animated cards */}
+      <section className="max-w-7xl mx-auto px-4 py-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        {features.map((feature, idx) => (
+          <motion.div
+            key={feature.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
+            className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-glass border border-primary-100 p-10 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
+          >
+            <div className="mb-6 text-primary-500 text-4xl bg-primary-100 w-20 h-20 rounded-full flex items-center justify-center shadow-lg">
+              {feature.icon}
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-blue-900 tracking-tight">{feature.title}</h3>
+            <p className="text-gray-500 text-lg font-medium">{feature.description}</p>
+          </motion.div>
+        ))}
       </section>
 
       {/* Featured Treks Section */}
@@ -168,7 +238,7 @@ export const Home: React.FC = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredTreks.map((trek, index) => (
+            {filteredTreks.map((trek, index) => (
               <motion.div
                 key={trek.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -230,23 +300,41 @@ export const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-24 bg-gradient-to-br from-primary-600 to-primary-700 relative overflow-hidden">
+        {/* Animated floating shapes (optional, keep for depth) */}
+        <motion.div
+          className="absolute -top-20 -left-20 w-96 h-96 bg-primary-400 opacity-30 rounded-full blur-3xl z-0"
+          animate={{ y: [0, 40, 0], x: [0, 20, 0], rotate: [0, 30, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -bottom-32 right-0 w-80 h-80 bg-blue-400 opacity-20 rounded-full blur-2xl z-0"
+          animate={{ y: [0, -30, 0], x: [0, -20, 0], rotate: [0, -20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.8, rotate: -8 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.8, type: 'spring', bounce: 0.4 }}
+            className="inline-block"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Start Your Adventure?
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight animate-glow">
+              Ready to <span className="text-primary-200 animate-pulse">Start Your Adventure?</span>
             </h2>
-            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of trekkers who trust TrekSphere for their mountain adventures. 
+            <p className="text-2xl text-primary-100 mb-10 max-w-2xl mx-auto animate-fadeInUp">
+              Join thousands of trekkers who trust <span className="font-bold text-white">TrekSphere</span> for their mountain adventures.<br/>
               Start planning your next trek today.
             </p>
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
-              <Link to="/auth">Get Started Now</Link>
-            </Button>
+            <motion.div
+              whileHover={{ scale: 1.08, rotate: 2 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-block"
+            >
+              <Button size="lg" variant="secondary" className="text-lg px-10 py-5 rounded-full font-bold shadow-2xl animate-flicker bg-primary-600 border-0">
+                <Link to="/auth">Get Started Now 🚀</Link>
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </section>

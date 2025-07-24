@@ -12,7 +12,7 @@ import {
   Thermometer,
   AlertTriangle
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -21,12 +21,13 @@ export const Treks: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
   const [selectedDuration, setSelectedDuration] = useState<string>('');
+  const navigate = useNavigate();
 
   const treks = [
     {
       id: 1,
       name: 'Annapurna Base Camp Trek',
-      location: 'Nepal, Himalayas',
+      location: 'Nepal',
       difficulty: 'Moderate',
       duration: '12-14 days',
       maxAltitude: '4,130m',
@@ -42,76 +43,76 @@ export const Treks: React.FC = () => {
     },
     {
       id: 2,
-      name: 'Torres del Paine W Circuit',
-      location: 'Chile, Patagonia',
-      difficulty: 'Challenging',
-      duration: '5-6 days',
-      maxAltitude: '1,200m',
-      bestSeason: 'Nov-Mar',
-      price: '$800',
-      rating: 4.9,
-      reviews: 89,
-      image: 'https://images.pexels.com/photos/1437297/pexels-photo-1437297.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Explore the iconic granite towers and pristine wilderness of Patagonia\'s most famous national park.',
-      highlights: ['Iconic granite towers', 'French Valley', 'Grey Glacier viewpoint'],
-      currentConditions: 'Windy conditions expected',
-      weather: 'Partly cloudy, 2°C to 18°C',
+      name: 'Langtang Valley Trek',
+      location: 'Nepal',
+      difficulty: 'Moderate',
+      duration: '7-9 days',
+      maxAltitude: '4,984m',
+      bestSeason: 'Mar-May, Sep-Nov',
+      price: '$700',
+      rating: 4.6,
+      reviews: 112,
+      image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
+      description: 'Trek through the beautiful Langtang Valley, known for its scenic landscapes, Tamang culture, and serene monasteries.',
+      highlights: ['Langtang National Park', 'Kyanjin Gompa', 'Langtang Lirung views'],
+      currentConditions: 'Clear with chilly mornings',
+      weather: 'Sunny, -2°C to 17°C',
     },
     {
       id: 3,
-      name: 'Mount Kilimanjaro - Machame Route',
-      location: 'Tanzania, East Africa',
-      difficulty: 'Hard',
-      duration: '6-8 days',
-      maxAltitude: '5,895m',
-      bestSeason: 'Jun-Oct, Dec-Mar',
-      price: '$2,400',
+      name: 'Manaslu Circuit Trek',
+      location: 'Nepal',
+      difficulty: 'Challenging',
+      duration: '14-16 days',
+      maxAltitude: '5,160m',
+      bestSeason: 'Sep-Nov, Mar-May',
+      price: '$1,400',
       rating: 4.7,
-      reviews: 203,
-      image: 'https://images.pexels.com/photos/2422915/pexels-photo-2422915.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Conquer Africa\'s highest peak via the scenic Machame route, known for its diverse ecosystems and challenging terrain.',
-      highlights: ['Summit Uhuru Peak', 'Barranco Wall climb', 'Multiple climate zones'],
-      currentConditions: 'Excellent summit conditions',
-      weather: 'Clear, -15°C to 25°C',
+      reviews: 89,
+      image: 'https://images.pexels.com/photos/2663683/pexels-photo-2663683.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'A remote and rugged trek that circles Mount Manaslu, Nepal’s eighth highest peak, through untouched Himalayan terrain.',
+      highlights: ['Larkya La Pass', 'Tibetan-influenced villages', 'Wild river crossings'],
+      currentConditions: 'Some snow at higher elevations',
+      weather: 'Partly cloudy, -8°C to 18°C',
     },
     {
       id: 4,
-      name: 'Mont Blanc Circuit',
-      location: 'France, Italy, Switzerland',
-      difficulty: 'Challenging',
-      duration: '10-11 days',
-      maxAltitude: '2,665m',
-      bestSeason: 'Jun-Sep',
+      name: 'Upper Mustang Trek',
+      location: 'Nepal',
+      difficulty: 'Moderate',
+      duration: '10-12 days',
+      maxAltitude: '3,810m',
+      bestSeason: 'Mar-Nov',
       price: '$1,800',
-      rating: 4.6,
-      reviews: 142,
-      image: 'https://images.pexels.com/photos/1261728/pexels-photo-1261728.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Circle the highest peak in Western Europe through three countries, experiencing Alpine culture and breathtaking mountain scenery.',
-      highlights: ['Multi-country adventure', 'Alpine huts accommodation', 'Chamonix valley views'],
-      currentConditions: 'Some snow on high passes',
-      weather: 'Variable, 0°C to 20°C',
+      rating: 4.9,
+      reviews: 134,
+      image: 'https://images.pexels.com/photos/1809644/pexels-photo-1809644.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Explore the ancient kingdom of Lo in the rain shadow of the Himalayas, filled with Tibetan culture and desert-like landscapes.',
+      highlights: ['Lo Manthang', 'Cave monasteries', 'Arid Himalayan landscapes'],
+      currentConditions: 'Dry and windy',
+      weather: 'Clear skies, 5°C to 20°C',
     },
     {
       id: 5,
-      name: 'Inca Trail to Machu Picchu',
-      location: 'Peru, Andes',
+      name: 'Mardi Himal Trek',
+      location: 'Nepal',
       difficulty: 'Moderate',
-      duration: '4 days',
-      maxAltitude: '4,215m',
-      bestSeason: 'May-Sep',
-      price: '$600',
+      duration: '5-7 days',
+      maxAltitude: '4,500m',
+      bestSeason: 'Mar-May, Sep-Nov',
+      price: '$500',
       rating: 4.5,
-      reviews: 298,
-      image: 'https://images.pexels.com/photos/2356045/pexels-photo-2356045.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Follow ancient Incan pathways through cloud forests and archaeological sites to reach the legendary Machu Picchu.',
-      highlights: ['Ancient Incan ruins', 'Sunrise at Machu Picchu', 'Cloud forest ecosystems'],
-      currentConditions: 'Trail permits required',
-      weather: 'Dry season, 5°C to 22°C',
+      reviews: 93,
+      image: 'https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'A hidden gem offering spectacular close-up views of the Annapurna range, ideal for a short and rewarding trek.',
+      highlights: ['Mardi Himal Base Camp', 'Dense rhododendron forests', 'Close Annapurna South views'],
+      currentConditions: 'Trail dry and open',
+      weather: 'Sunny, 0°C to 18°C',
     },
     {
       id: 6,
       name: 'Everest Base Camp Trek',
-      location: 'Nepal, Himalayas',
+      location: 'Nepal',
       difficulty: 'Hard',
       duration: '16-18 days',
       maxAltitude: '5,364m',
@@ -144,7 +145,7 @@ export const Treks: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -288,6 +289,7 @@ export const Treks: React.FC = () => {
                     >
                       View Details →
                     </Link>
+                    <Button size="sm" onClick={() => navigate(`/trek/${trek.id}/route`)} className="mt-2 w-full bg-gradient-to-r from-green-500 to-emerald-400 text-white font-semibold shadow-lg hover:scale-105 transition-transform border-2 border-white/60">View Route</Button>
                     <Button size="sm" variant="outline">
                       Add to Waitlist
                     </Button>

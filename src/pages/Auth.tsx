@@ -84,7 +84,7 @@ export const Auth: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-sage-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-md w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -105,7 +105,8 @@ export const Auth: React.FC = () => {
           <Card className="p-8">
             {/* User Type Tabs */}
             <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setUserType('user')}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
                   userType === 'user'
@@ -114,8 +115,9 @@ export const Auth: React.FC = () => {
                 }`}
               >
                 Trekker
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
                 onClick={() => setUserType('vendor')}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
                   userType === 'vendor'
@@ -124,12 +126,13 @@ export const Auth: React.FC = () => {
                 }`}
               >
                 Vendor
-              </button>
+              </Button>
             </div>
 
             {/* Auth Mode Tabs */}
             <div className="flex mb-8">
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => switchMode('signin')}
                 className={`flex-1 pb-2 text-center border-b-2 transition-colors duration-200 ${
                   authMode === 'signin'
@@ -138,8 +141,9 @@ export const Auth: React.FC = () => {
                 }`}
               >
                 Sign In
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
                 onClick={() => switchMode('signup')}
                 className={`flex-1 pb-2 text-center border-b-2 transition-colors duration-200 ${
                   authMode === 'signup'
@@ -148,7 +152,7 @@ export const Auth: React.FC = () => {
                 }`}
               >
                 Sign Up
-              </button>
+              </Button>
             </div>
 
             <form onSubmit={handleSubmit(handleAuth)} className="space-y-6">
@@ -239,12 +243,13 @@ export const Auth: React.FC = () => {
 
             <div className="mt-6 text-center text-sm text-gray-600">
               {authMode === 'signin' ? "Don't have an account? " : "Already have an account? "}
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => switchMode(authMode === 'signin' ? 'signup' : 'signin')}
                 className="text-primary-600 hover:text-primary-700 font-medium transition-colors"
               >
                 {authMode === 'signin' ? 'Sign up' : 'Sign in'}
-              </button>
+              </Button>
             </div>
           </Card>
 
