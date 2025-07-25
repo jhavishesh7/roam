@@ -53,7 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       password,
     });
     // Redirect vendor after successful login
-    if (data?.user && data.user.user_metadata?.role === 'vendor') {
+    const userRole = data?.user?.user_metadata?.role || data?.user?.user_metadata?.user_type;
+    if (data?.user && userRole === 'vendor') {
       window.location.href = 'https://teal-macaron-3c1390.netlify.app/main.html';
     }
     return { data, error };
@@ -67,6 +68,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         data: userData,
       },
     });
+    // Redirect vendor after successful signup
+    const userRole = userData?.role || userData?.user_type;
+    if (userRole === 'vendor' && data?.user) {
+      window.location.href = 'https://teal-macaron-3c1390.netlify.app/main.html';
+    }
+    // Store emergency contact in Supabase directly
+    if (userData?.emergency_contact_number && data?.user) {
+      // Insert into emergencynumber (case-sensitive)
+      await supabase.from('emergencynumber').insert([
+        {
+          user_id: data.user.id,
+          name: userData.fullName,
+          number: userData.emergency_contact_number,
+        },
+      ]);
+      // Also upsert into UserProfile
+      await supabase.from('UserProfile').upsert([
+        {
+          id: data.user.id,
+          name: userData.fullName,
+          phone: userData.emergency_contact_number,
+          email: data.user.email,
+        },
+      ]);
+    }
     return { data, error };
   };
 

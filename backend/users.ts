@@ -13,7 +13,12 @@ export async function getUserById(id: string) {
 }
 
 export async function getUserProfileById(id: string) {
-  const { data, error } = await supabase.from('UserProfile').select('*').eq('id', id).single();
+  const { data, error } = await supabase.from('UserProfile').select('*').eq('id', id);
   if (error) throw error;
-  return data;
+  if (!data || data.length === 0) return null; // No profile found
+  if (data.length > 1) {
+    // Optionally log a warning here
+    return data[0]; // Return the first profile if duplicates exist
+  }
+  return data[0];
 } 

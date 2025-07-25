@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mountain, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Mountain, Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -17,6 +17,8 @@ interface FormData {
   password: string;
   fullName?: string;
   confirmPassword?: string;
+  emergencyContactName?: string;
+  emergencyContactNumber?: string;
 }
 
 export const Auth: React.FC = () => {
@@ -42,7 +44,9 @@ export const Auth: React.FC = () => {
         
         const { error } = await signUp(data.email, data.password, {
           full_name: data.fullName,
-          user_type: userType,
+          role: userType, // use 'role' instead of 'user_type'
+          emergency_contact_name: data.fullName, // Use full name for emergency contact name
+          emergency_contact_number: data.emergencyContactNumber,
         });
         
         if (error) {
@@ -53,7 +57,7 @@ export const Auth: React.FC = () => {
             navigate('/dashboard');
           } else {
             // Redirect to vendor dashboard (external link)
-            window.location.href = 'https://vendor.treksphere.com/dashboard';
+            window.location.href = 'https://teal-macaron-3c1390.netlify.app/main.html';
           }
         }
       } else {
@@ -67,7 +71,7 @@ export const Auth: React.FC = () => {
             navigate('/dashboard');
           } else {
             // Redirect to vendor dashboard (external link)
-            window.location.href = 'https://vendor.treksphere.com/dashboard';
+            window.location.href = 'https://teal-macaron-3c1390.netlify.app/main.html';
           }
         }
       }
@@ -157,17 +161,27 @@ export const Auth: React.FC = () => {
 
             <form onSubmit={handleSubmit(handleAuth)} className="space-y-6">
               {authMode === 'signup' && (
-                <Input
-                  label="Full Name"
-                  type="text"
-                  icon={<User className="h-5 w-5" />}
-                  placeholder="Enter your full name"
-                  {...register('fullName', { 
-                    required: 'Full name is required',
-                    minLength: { value: 2, message: 'Name must be at least 2 characters' }
-                  })}
-                  error={errors.fullName?.message}
-                />
+                <>
+                  <Input
+                    label="Full Name"
+                    type="text"
+                    icon={<User className="h-5 w-5" />}
+                    placeholder="Enter your full name"
+                    {...register('fullName', { 
+                      required: 'Full name is required',
+                      minLength: { value: 2, message: 'Name must be at least 2 characters' }
+                    })}
+                    error={errors.fullName?.message}
+                  />
+                  <Input
+                    label="Emergency Contact Number"
+                    type="tel"
+                    icon={<Phone className="h-5 w-5" />}
+                    placeholder="Enter emergency contact number"
+                    {...register('emergencyContactNumber', { required: 'Emergency contact number is required' })}
+                    error={errors.emergencyContactNumber?.message}
+                  />
+                </>
               )}
 
               <Input
@@ -192,8 +206,7 @@ export const Auth: React.FC = () => {
                   icon={<Lock className="h-5 w-5" />}
                   placeholder="Enter your password"
                   {...register('password', { 
-                    required: 'Password is required',
-                    minLength: { value: 6, message: 'Password must be at least 6 characters' }
+                    required: 'Password is required'
                   })}
                   error={errors.password?.message}
                 />

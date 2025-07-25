@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -25,6 +25,9 @@ import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 
 export const TrekDetail: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   const { id } = useParams();
   const [newMessage, setNewMessage] = useState('');
   const [isWaitlisted, setIsWaitlisted] = useState(false);

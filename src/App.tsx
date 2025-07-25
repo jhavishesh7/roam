@@ -77,6 +77,21 @@ const AppContent: React.FC = () => {
           },
         }}
       />
+      {/* Floating AI Widget Button */}
+      <button
+        aria-label="AI Widget"
+        onClick={() => window.location.href = 'https://monumental-longma-41716d.netlify.app/'}
+        className="fixed z-50 bottom-6 right-6 bg-gradient-to-br from-blue-500 to-green-400 text-white rounded-full shadow-2xl p-4 flex items-center justify-center hover:scale-110 transition-transform duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.18)' }}
+      >
+        {/* Simple robot icon SVG */}
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <rect x="4" y="8" width="16" height="10" rx="4" fill="currentColor" className="text-white/80" />
+          <circle cx="8.5" cy="13" r="1.5" fill="#fff" />
+          <circle cx="15.5" cy="13" r="1.5" fill="#fff" />
+          <rect x="10" y="2" width="4" height="4" rx="2" fill="currentColor" className="text-white/80" />
+        </svg>
+      </button>
     </div>
   );
 };

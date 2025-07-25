@@ -132,7 +132,7 @@ const verifyToken = (req, res, next) => {
 
 // Supabase Auth Registration
 app.post('/api/register', async (req, res) => {
-  const { email, password, name, role, phone, location, nearestTrek } = req.body;
+  const { email, password, name, role, phone, location, nearestTrek, emergency_contact_name, emergency_contact_number } = req.body;
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return res.status(400).json({ error: error.message });
   const { user } = data;
@@ -143,6 +143,11 @@ app.post('/api/register', async (req, res) => {
     await supabase.from('Vendor').insert([{ id: user.id, name, email, phone, location, nearest_trek: nearestTrek, status: 'pending' }]);
   } else if (role === 'user') {
     await supabase.from('UserProfile').insert([{ id: user.id, name }]);
+  }
+  // Insert emergency contact if provided
+  const emergencyName = emergency_contact_name || name;
+  if (emergencyName && emergency_contact_number) {
+    await supabase.from('EmergencyNumber').insert([{ user_id: user.id, name: emergencyName, number: emergency_contact_number }]);
   }
   res.json({ message: 'Registration successful. Please verify your email.' });
 });
@@ -625,6 +630,17 @@ app.get('/api/bookings', async (req, res) => {
   const { data, error } = await supabase.from('Booking').select('*');
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
+});
+
+// Add emergency contact endpoint
+app.post('/api/emergency-number', async (req, res) => {
+  const { user_id, name, number } = req.body;
+  if (!user_id || !name || !number) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  const { error } = await supabase.from('EmergencyNumber').insert([{ user_id, name, number }]);
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ message: 'Emergency contact added' });
 });
 
 const port = 5000;  // Use Render's assigned port

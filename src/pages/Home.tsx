@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { useAuth } from '../contexts/AuthContext';
 
 export const Home: React.FC = () => {
   // Example gallery images
@@ -44,23 +45,23 @@ export const Home: React.FC = () => {
     },
     {
       id: 2,
-      name: 'Torres del Paine',
-      location: 'Chile',
-      difficulty: 'Challenging',
-      duration: '8-10 days',
-      image: 'https://images.pexels.com/photos/1437297/pexels-photo-1437297.jpeg?auto=compress&cs=tinysrgb&w=800',
+      name: 'Everest Base Camp',
+      location: 'Nepal',
+      difficulty: 'Hard',
+      duration: '14-16 days',
+      image: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800',
       rating: 4.9,
-      reviews: 89,
+      reviews: 200,
     },
     {
       id: 3,
-      name: 'Mount Kilimanjaro',
-      location: 'Tanzania',
-      difficulty: 'Hard',
-      duration: '6-8 days',
-      image: 'https://images.pexels.com/photos/2422915/pexels-photo-2422915.jpeg?auto=compress&cs=tinysrgb&w=800',
+      name: 'Upper Mustang',
+      location: 'Nepal',
+      difficulty: 'Moderate',
+      duration: '10-12 days',
+      image: 'https://images.pexels.com/photos/1809644/pexels-photo-1809644.jpeg?auto=compress&cs=tinysrgb&w=800',
       rating: 4.7,
-      reviews: 203,
+      reviews: 134,
     },
   ];
 
@@ -70,16 +71,9 @@ export const Home: React.FC = () => {
 
   // Handle search
   const handleSearch = () => {
-    if (!search.trim()) {
-      setFilteredTreks(featuredTreks);
-      return;
+    if (search.trim()) {
+      navigate(`/treks?search=${encodeURIComponent(search)}`);
     }
-    setFilteredTreks(
-      featuredTreks.filter(trek =>
-        trek.name.toLowerCase().includes(search.toLowerCase()) ||
-        trek.location.toLowerCase().includes(search.toLowerCase())
-      )
-    );
   };
 
   // When selectedBg changes, update animation key
@@ -123,6 +117,9 @@ export const Home: React.FC = () => {
       description: 'Discover authentic cultural experiences with local homestays and immersive cultural packages.',
     },
   ];
+
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white font-sans">
@@ -173,11 +170,33 @@ export const Home: React.FC = () => {
               <Search className="h-5 w-5 text-white" /> Search
             </Button>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" variant="primary" className="rounded-full px-8 py-3 text-lg font-semibold shadow-md animate-glow">
+          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <Button
+              size="lg"
+              variant="primary"
+              className="rounded-full px-8 py-3 text-lg font-semibold shadow-md animate-glow"
+              onClick={() => {
+                if (search.trim()) {
+                  navigate(`/treks?search=${encodeURIComponent(search)}`);
+                } else {
+                  navigate('/treks');
+                }
+              }}
+            >
               Find Your Trek
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8 py-3 text-lg font-semibold border-2 border-white text-white hover:bg-white/10 shadow-md animate-glow">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full px-8 py-3 text-lg font-semibold border-2 border-white text-white hover:bg-white/10 shadow-md animate-glow"
+              onClick={() => {
+                if (!user) {
+                  navigate('/auth');
+                } else {
+                  navigate('/dashboard?tab=profile');
+                }
+              }}
+            >
               Get Safety Alerts
             </Button>
           </div>
@@ -187,7 +206,7 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="absolute bottom-8 right-8 flex gap-6 z-30 bg-white/70 rounded-2xl px-6 py-3 shadow-xl backdrop-blur-md"
+          className="absolute bottom-24 right-8 flex md:flex-row flex-col gap-6 z-30 bg-white/70 rounded-2xl px-6 py-3 shadow-xl backdrop-blur-md"
           style={{ transform: `translateY(${parallax * 0.5}px)` }}
         >
           {galleryImages.map((img, idx) => (
@@ -219,7 +238,6 @@ export const Home: React.FC = () => {
           </motion.div>
         ))}
       </section>
-
       {/* Featured Treks Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -236,7 +254,6 @@ export const Home: React.FC = () => {
               Discover the most popular and breathtaking trekking destinations around the world.
             </p>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTreks.map((trek, index) => (
               <motion.div
@@ -276,25 +293,24 @@ export const Home: React.FC = () => {
                         <span>{trek.duration}</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-1 text-sm text-gray-600">
                         <Users className="h-4 w-4" />
                         <span>{trek.reviews} reviews</span>
                       </div>
-                      <Button size="sm">
-                        <Link to={`/trek/${trek.id}`}>View Details</Link>
-                      </Button>
+                    </div>
+                    <div className="flex justify-end">
+                      <Link
+                        to={`/trek/${trek.id}`}
+                        className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 animate-buttonFlicker px-3 py-1.5 text-sm mt-2"
+                      >
+                        View Details
+                      </Link>
                     </div>
                   </div>
                 </Card>
               </motion.div>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button size="lg">
-              <Link to="/treks">View All Treks</Link>
-            </Button>
           </div>
         </div>
       </section>

@@ -344,7 +344,7 @@ export const Dashboard: React.FC = () => {
                         <p className="text-gray-600 mb-4">
                           Stay connected with fellow trekkers. Use the emergency broadcast system to alert others on your waitlisted treks.
                         </p>
-                        <Button variant="secondary" size="sm">
+                        <Button variant="secondary" size="sm" onClick={() => window.open('https://ultraabhiyan.site/trek/index2.php', '_blank')}>
                           <AlertTriangle className="h-4 w-4 mr-2" />
                           Emergency Broadcast
                         </Button>

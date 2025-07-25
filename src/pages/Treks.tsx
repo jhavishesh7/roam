@@ -12,16 +12,24 @@ import {
   Thermometer,
   AlertTriangle
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 
 export const Treks: React.FC = () => {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
   const [selectedDuration, setSelectedDuration] = useState<string>('');
   const navigate = useNavigate();
+
+  // On mount, read search param from URL
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || '';
+    setSearchQuery(search);
+  }, [location.search]);
 
   const treks = [
     {
@@ -32,7 +40,7 @@ export const Treks: React.FC = () => {
       duration: '12-14 days',
       maxAltitude: '4,130m',
       bestSeason: 'Oct-Nov, Mar-May',
-      price: '$1,200',
+      price: 'NPR 1,200',
       rating: 4.8,
       reviews: 156,
       image: 'https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -49,7 +57,7 @@ export const Treks: React.FC = () => {
       duration: '7-9 days',
       maxAltitude: '4,984m',
       bestSeason: 'Mar-May, Sep-Nov',
-      price: '$700',
+      price: 'NPR 700',
       rating: 4.6,
       reviews: 112,
       image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
@@ -66,7 +74,7 @@ export const Treks: React.FC = () => {
       duration: '14-16 days',
       maxAltitude: '5,160m',
       bestSeason: 'Sep-Nov, Mar-May',
-      price: '$1,400',
+      price: 'NPR 1,400',
       rating: 4.7,
       reviews: 89,
       image: 'https://images.pexels.com/photos/2663683/pexels-photo-2663683.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -83,7 +91,7 @@ export const Treks: React.FC = () => {
       duration: '10-12 days',
       maxAltitude: '3,810m',
       bestSeason: 'Mar-Nov',
-      price: '$1,800',
+      price: 'NPR 1,800',
       rating: 4.9,
       reviews: 134,
       image: 'https://images.pexels.com/photos/1809644/pexels-photo-1809644.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -100,7 +108,7 @@ export const Treks: React.FC = () => {
       duration: '5-7 days',
       maxAltitude: '4,500m',
       bestSeason: 'Mar-May, Sep-Nov',
-      price: '$500',
+      price: 'NPR 500',
       rating: 4.5,
       reviews: 93,
       image: 'https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -117,7 +125,7 @@ export const Treks: React.FC = () => {
       duration: '16-18 days',
       maxAltitude: '5,364m',
       bestSeason: 'Mar-May, Sep-Dec',
-      price: '$2,800',
+      price: 'NPR 2,800',
       rating: 4.9,
       reviews: 387,
       image: 'https://images.pexels.com/photos/1131458/pexels-photo-1131458.jpeg?auto=compress&cs=tinysrgb&w=800',
