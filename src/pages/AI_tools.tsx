@@ -2,7 +2,7 @@ import React from 'react';
 
 const AITools: React.FC = () => {
   const handleRedirect = () => {
-    window.location.href = 'https://monumental-longma-41716d.netlify.app/';
+    window.location.href = 'https://ai-model-mu.vercel.app/';
   };
 
   return (
